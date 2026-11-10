@@ -12,11 +12,11 @@
 | :--- | :--- | :--- | :--- |
 | `clk` | 1 bit | Rising edge active | System clock |
 | `rst_n` | 1 bit | Active-low | Asynchronous system reset |
-| `slot_id` | 4 bits (`[3:0]`) | `0` to `11` | 12 medication reminder slots |
+| `slot_id` | 4 bits (`[3:0]`) | `0` to `14` | 15 medication reminder slots |
 | `med_id` | 2 bits (`[1:0]`) | `0` to `3` | 4 distinct medications |
 | `hour` | 5 bits (`[4:0]`) | `0` to `23` | Hours (24-hour time format) |
 | `minute` | 6 bits (`[5:0]`) | `0` to `59` | Minutes |
-| `due_vector` | 12 bits (`[11:0]`) | Bitmask | Bit `i` high indicates slot `i` is due |
+| `due_vector` | 15 bits (`[14:0]`) | Bitmask | Bit `i` high indicates slot `i` is due (0 to 14) |
 | `event_code` | 2 bits (`[1:0]`) | `00`=Start, `01`=Ack, `10`=Missed | Standard event codes |
 | `counter_width` | 8 bits (`[7:0]`) | `0` to `255` | Dose event counters (saturating at 255) |
 | `caregiver_fifo_depth` | Parameter | Default: `8` records | Buffer for remote telemetry link |
@@ -36,7 +36,7 @@
 - **Inputs:**
   - `clk`, `rst_n`
   - `cfg_write_req`: 1 bit write strobe
-  - `cfg_slot_idx[3:0]`: target slot index (0–11)
+  - `cfg_slot_idx[3:0]`: target slot index (0–14)
   - `cfg_med_id[1:0]`: medication ID (0–3)
   - `cfg_hour[4:0]`: scheduled hour (0–23)
   - `cfg_minute[5:0]`: scheduled minute (0–59)
@@ -44,7 +44,7 @@
 - **Outputs:**
   - `cfg_error`: 1 bit flag (asserted 1 cycle if write fields are out of range)
   - `mem_we`: 1 bit write enable strobe to `schedule_memory`
-  - `mem_slot[3:0]`: validated slot index
+  - `mem_slot[3:0]`: validated slot index (0–14)
   - `mem_med_id[1:0]`: validated medication ID
   - `mem_hour[4:0]`: validated hour
   - `mem_minute[5:0]`: validated minute
@@ -55,10 +55,10 @@
   - `clk`, `rst_n`
   - `mem_we`, `mem_slot[3:0]`, `mem_med_id[1:0]`, `mem_hour[4:0]`, `mem_minute[5:0]`, `mem_enable`
 - **Outputs:**
-  - `sched_enables[11:0]`: continuous 12-bit enable vector
-  - `sched_hours[59:0]`: packed 12×5-bit scheduled hours
-  - `sched_minutes[71:0]`: packed 12×6-bit scheduled minutes
-  - `sched_med_ids[23:0]`: packed 12×2-bit medication IDs
+  - `sched_enables[14:0]`: continuous 15-bit enable vector
+  - `sched_hours[74:0]`: packed 15×5-bit scheduled hours
+  - `sched_minutes[89:0]`: packed 15×6-bit scheduled minutes
+  - `sched_med_ids[29:0]`: packed 15×2-bit medication IDs
 
 #### 2.3 `caregiver_interface.v`
 - **Inputs:**
@@ -94,9 +94,9 @@
   - `clk`, `rst_n`
   - `minute_tick`: 1-cycle pulse from `timer_unit`
   - `curr_hour[4:0]`, `curr_minute[5:0]`
-  - `sched_enables[11:0]`, `sched_hours[59:0]`, `sched_minutes[71:0]`
+  - `sched_enables[14:0]`, `sched_hours[74:0]`, `sched_minutes[89:0]`
 - **Outputs:**
-  - `due_vector[11:0]`: 1-cycle pulse vector where bit `i` is high if slot `i` matches current time
+  - `due_vector[14:0]`: 1-cycle pulse vector where bit `i` is high if slot `i` matches current time (0 to 14)
 
 ---
 
@@ -104,14 +104,14 @@
 
 #### 2.6 `event_queue.v`
 - **Parameters:**
-  - `QUEUE_DEPTH`: default 12
+  - `QUEUE_DEPTH`: default 15
 - **Inputs:**
   - `clk`, `rst_n`
-  - `due_vector[11:0]`: 1-cycle pulse vector from `schedule_matcher`
+  - `due_vector[14:0]`: 1-cycle pulse vector from `schedule_matcher`
   - `event_accept`: 1-cycle handshake strobe from `reminder_controller`
 - **Outputs:**
   - `event_valid`: high while queue has at least one pending event
-  - `event_slot[3:0]`: head slot of queue (stable while `event_valid` is high)
+  - `event_slot[3:0]`: head slot of queue (0 to 14, stable while `event_valid` is high)
   - `queue_empty`, `queue_full`, `queue_overflow`
 
 #### 2.7 `dose_tracker.v`
@@ -173,10 +173,10 @@
 - **Inputs:**
   - `clk`, `rst_n`
   - `open_req`: 1-cycle request pulse
-  - `req_slot[3:0]`: requested slot compartment
+  - `req_slot[3:0]`: requested slot compartment (0 to 14)
   - `close_req`: 1-cycle close/relock pulse
 - **Outputs:**
-  - `compartment_unlock[11:0]`: 1-hot unlock signals (at most one compartment unlocked at a time)
+  - `compartment_unlock[14:0]`: 1-hot unlock signals (at most one of 15 compartments unlocked at a time)
   - `access_granted`: 1-cycle status pulse
   - `access_denied`: 1-cycle status pulse (if slot invalid or another door already open)
 

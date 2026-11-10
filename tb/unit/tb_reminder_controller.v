@@ -218,14 +218,16 @@ module tb_reminder_controller;
         ack_pulse = 0;
         @(posedge clk);
 
-        // Test 7: Back-to-back reminders
-        $display("[TEST 7] Back-to-back reminders...");
-        // Slot 7 is pending in queue
+        // Test 7: Back-to-back reminders with highest slot (Slot 14 of 15)
+        $display("[TEST 7] Back-to-back reminders with Slot 14 (of 15 slots)...");
         @(posedge clk);
-        if (event_accept && (active_slot === 4'd7)) begin
-            $display("[PASS] Back-to-back reminder accepted smoothly.");
-        end
+        event_valid = 1;
+        event_slot  = 4'd14; // Slot 14
+        @(posedge clk);
         event_valid = 0;
+        if (event_accept && (active_slot === 4'd14)) begin
+            $display("[PASS] Back-to-back reminder with slot 14 accepted smoothly.");
+        end
         repeat (2) @(posedge clk);
         ack_pulse = 1;
         @(posedge clk);

@@ -19,7 +19,7 @@ MediTrack is an offline-first, processor-free digital System-on-Chip (SoC) desig
        +-----------+-----------+           +----------+-----------+
        |    schedule_memory    +---------->|   schedule_matcher   |
        +-----------------------+           +----------+-----------+
-                                                      | (due_vector[11:0])
+                                                      | (due_vector[14:0])
                                                       v
                                            +----------+-----------+
                                            |     event_queue      |

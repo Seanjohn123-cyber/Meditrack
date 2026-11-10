@@ -6,6 +6,7 @@ echo   MediTrack Test Suite Runner (Windows)
 echo ===================================================
 
 if not exist sim\build mkdir sim\build
+if not exist pictures mkdir pictures
 
 set FAILED=0
 set TOTAL=0
@@ -34,6 +35,11 @@ for %%f in (tb\unit\tb_*.v) do (
         if !ERRORLEVEL! neq 0 (
             echo [SIMULATION FAILED] !TB_NAME!
             set /a FAILED+=1
+        ) else (
+            if exist !TB_NAME!.vcd (
+                python scripts\waveform_screenshot.py !TB_NAME!.vcd pictures\!TB_NAME!_waveform.png "!TB_NAME! Waveform"
+                del !TB_NAME!.vcd
+            )
         )
     )
 )
@@ -42,6 +48,7 @@ echo.
 echo ===================================================
 if %FAILED% equ 0 (
     echo   ALL TESTS PASSED (%TOTAL%/%TOTAL%)
+    echo   Screenshots updated in pictures\
 ) else (
     echo   TESTS FAILED: %FAILED%/%TOTAL%
 )

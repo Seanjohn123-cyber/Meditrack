@@ -3,7 +3,7 @@
 MediTrack is a digital System-on-Chip (SoC) designed in Verilog HDL for reliable, human-centred medication reminder and compartment access management. It is designed to operate offline-first with zero software or network dependency for core life-safety reminders, while offering an asynchronous telemetry channel for remote caregiver monitoring.
 
 ## Key Features
-- **12 Configurable Schedule Slots:** Supporting 4 medication IDs with programmable hours and minutes.
+- **15 Configurable Schedule Slots:** Supporting 4 medication IDs with programmable hours and minutes (slots 0 to 14).
 - **Hardware Schedule Matcher:** Compares real-time clock counter with enabled schedule records.
 - **Simultaneous Event Queue:** Safely buffers and arbitrates concurrent dose events.
 - **Reminder State Machine:** Orchestrates reminder lifecycle, user alerts, and strict priority arbitration.

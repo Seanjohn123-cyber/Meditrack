@@ -1,7 +1,7 @@
 # MediTrack Register Map & Memory Layout
 
-## 1. Schedule Memory Layout (Slots 0 to 11)
-Each slot register consists of 14 bits:
+## 1. Schedule Memory Layout (Slots 0 to 14)
+Each slot register consists of 14 bits (total 15 slots):
 - `[13]`: Slot Enable (`1` = active schedule, `0` = disabled)
 - `[12:11]`: Medication ID (`0` to `3`)
 - `[10:6]`: Scheduled Hour (`0` to `23`, 5 bits)

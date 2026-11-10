@@ -2,10 +2,10 @@
 
 ## Functional Requirements
 - **FR-01:** Support storage for up to 4 medication types (2-bit ID).
-- **FR-02:** Support 12 configurable schedule slots (4-bit slot index 0–11).
+- **FR-02:** Support 15 configurable schedule slots (4-bit slot index 0–14).
 - **FR-03:** Support time setting and minute boundary detection.
-- **FR-04:** Reject invalid configuration (hour > 23, minute > 59, slot >= 12).
-- **FR-05:** Match schedule times on minute ticks and assert due pulses via a 12-bit vector.
+- **FR-04:** Reject invalid configuration (hour > 23, minute > 59, slot >= 15).
+- **FR-05:** Match schedule times on minute ticks and assert due pulses via a 15-bit vector (`due_vector[14:0]`).
 - **FR-06:** Enqueue multiple simultaneous due events without loss.
 - **FR-07:** Sequential presentation of queued events to reminder controller.
 - **FR-08:** Audible and visual alert signaling during active reminders.
