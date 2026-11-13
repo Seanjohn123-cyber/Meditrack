@@ -3,7 +3,7 @@ IVERILOG = iverilog -g2012
 VVP = vvp
 BUILD_DIR = build
 
-.PHONY: all clean unit_tests tb_reminder_controller tb_acknowledgement_unit tb_missed_dose_detector
+.PHONY: all clean unit_tests tb_reminder_controller tb_acknowledgement_unit tb_missed_dose_detector tb_reminder_subsystem
 
 all: unit_tests
 
@@ -22,7 +22,11 @@ tb_reminder_controller: $(BUILD_DIR)
 	$(IVERILOG) -o $(BUILD_DIR)/tb_reminder_controller.vvp ../rtl/reminder/reminder_controller.v ../tb/unit/tb_reminder_controller.v
 	$(VVP) $(BUILD_DIR)/tb_reminder_controller.vvp
 
-unit_tests: tb_acknowledgement_unit tb_missed_dose_detector tb_reminder_controller
+tb_reminder_subsystem: $(BUILD_DIR)
+	$(IVERILOG) -o $(BUILD_DIR)/tb_reminder_subsystem.vvp ../rtl/reminder/*.v ../tb/unit/tb_reminder_subsystem.v
+	$(VVP) $(BUILD_DIR)/tb_reminder_subsystem.vvp
+
+unit_tests: tb_acknowledgement_unit tb_missed_dose_detector tb_reminder_controller tb_reminder_subsystem
 
 clean:
 	rm -rf $(BUILD_DIR) *.vcd *.vvp

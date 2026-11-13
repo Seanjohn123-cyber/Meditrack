@@ -19,12 +19,16 @@ for tb in tb/unit/tb_*.v; do
     echo "Running $tb_name..."
 
     rtl_file=""
-    for dir in reminder configuration timing events peripherals communication; do
-        if [ -f "rtl/$dir/${mod_name}.v" ]; then
-            rtl_file="rtl/$dir/${mod_name}.v"
-            break
-        fi
-    done
+    if [ "$mod_name" == "reminder_subsystem" ]; then
+        rtl_file="rtl/reminder/*.v"
+    else
+        for dir in reminder configuration timing events peripherals communication; do
+            if [ -f "rtl/$dir/${mod_name}.v" ]; then
+                rtl_file="rtl/$dir/${mod_name}.v"
+                break
+            fi
+        done
+    fi
 
     if iverilog -g2012 -o "sim/build/${tb_name}.vvp" $rtl_file "$tb"; then
         if ! vvp "sim/build/${tb_name}.vvp"; then
