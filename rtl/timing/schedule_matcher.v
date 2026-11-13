@@ -1,79 +1,49 @@
 `timescale 1ns/1ps
 
 module schedule_matcher (
-    input  wire        clk,              // 100 MHz system clock
-    input  wire        rst_n,            // Active-low asynchronous reset
+    input  wire         clk,             // 100 MHz system clock
+    input  wire         rst_n,           // Active-low asynchronous reset
     
     // Time interface from timer_unit
-    input  wire [2:0]  curr_day,         // 0=Sun .. 6=Sat
-    input  wire [4:0]  curr_hour,        // 0..23
-    input  wire [5:0]  curr_minute,      // 0..59
-    input  wire        minute_tick,      // 1-cycle minute rollover strobe
+    input  wire         minute_tick,     // 1-cycle minute rollover strobe
+    input  wire [4:0]   curr_hour,       // 0..23
+    input  wire [5:0]   curr_minute,     // 0..59
     
-    // Synchronous SRAM schedule interface (256 x 16-bit)
-    // Word format: [15]=Valid, [14]=Reserved, [13:11]=Day, [10:6]=Hour, [5:0]=Minute
-    input  wire [15:0] mem_data,
-    output reg  [7:0]  mem_addr,
+    // 15-Slot Parallel Schedule Interface (Flattened Vectors)
+    input  wire [14:0]  sched_enables,   // 1 bit per slot (1 = Active, 0 = Disabled)
+    input  wire [74:0]  sched_hours,     // 15 slots * 5 bits 
+    input  wire [89:0]  sched_minutes,   // 15 slots * 6 bits 
     
-    // Downstream actuator interface
-    output reg         trigger_dispense  // 1-cycle dispense trigger pulse
+    // Downstream Event Queue Interface
+    output reg  [14:0]  due_vector       // 15-bit parallel pulse vector
 );
 
-    // FSM state encoding
-    localparam [1:0] IDLE    = 2'd0,
-                     FETCH   = 2'd1,
-                     COMPARE = 2'd2;
-
-    reg [1:0] state;
-    reg [7:0] slot_count;
+    integer i;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            state            <= IDLE;
-            mem_addr         <= 8'd0;
-            slot_count       <= 8'd0;
-            trigger_dispense <= 1'b0;
+            due_vector <= 15'b0;
         end else begin
-            // Default low to enforce single-cycle pulse behavior
-            trigger_dispense <= 1'b0;
+            // Default to 0 on every clock cycle to guarantee strict 1-cycle pulses
+            due_vector <= 15'b0;
 
-            case (state)
-                IDLE: begin
-                    mem_addr   <= 8'd0;
-                    slot_count <= 8'd0;
-                    if (minute_tick) begin
-                        state <= FETCH;
+            // Only evaluate schedules on the exact cycle the minute rolls over
+            if (minute_tick) begin
+                
+                // Synthesizes into 15 parallel hardware comparators
+                for (i = 0; i < 15; i = i + 1) begin
+                    
+                    // Verilog-2001 indexed part-select [base +: width]
+                    if (sched_enables[i] && 
+                       (sched_hours[i*5 +: 5] == curr_hour) && 
+                       (sched_minutes[i*6 +: 6] == curr_minute)) begin
+                        
+                        // Assert the specific bit for this slot
+                        due_vector[i] <= 1'b1; 
+                        
                     end
                 end
-
-                FETCH: begin
-                    // Drive address bus; allow 1 cycle for synchronous SRAM read latency
-                    mem_addr <= slot_count;
-                    state    <= COMPARE;
-                end
-
-                COMPARE: begin
-                    // Evaluate valid bit and unpacked timestamp fields
-                    if (mem_data[15] &&
-                        (mem_data[13:11] == curr_day) &&
-                        (mem_data[10:6]  == curr_hour) &&
-                        (mem_data[5:0]   == curr_minute)) begin
-                        trigger_dispense <= 1'b1;
-                    end
-
-                    // Sweep all 256 schedule slots before returning to sleep
-                    if (slot_count == 8'd255) begin
-                        state <= IDLE;
-                    end else begin
-                        slot_count <= slot_count + 8'd1;
-                        state      <= FETCH;
-                    end
-                end
-
-                default: begin
-                    state <= IDLE;
-                end
-            endcase
+            end
         end
     end
 
