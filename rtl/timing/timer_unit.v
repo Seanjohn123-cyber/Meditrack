@@ -22,6 +22,10 @@ module timer_unit #(
     integer clk_counter;
     integer sec_counter;
 
+    // --- CHANGE 1: Define the edge detector ---
+    reg time_load_en_d1;
+    wire load_strobe = time_load_en && !time_load_en_d1;
+
     always @(posedge clk or negedge rst_n) begin
         
         // --- Asynchronous Reset ---
@@ -33,12 +37,18 @@ module timer_unit #(
             curr_minute <= 6'd0;
             minute_tick <= 1'b0; 
             
+            // --- CHANGE 2: Reset the edge detector register ---
+            time_load_en_d1 <= 1'b0;
+            
         end else begin
+            // --- CHANGE 3: Track previous level for rising-edge detection ---
+            time_load_en_d1 <= time_load_en;
+
             // Default state: ensure tick acts as a single-cycle pulse
             minute_tick <= 1'b0; 
 
-            // --- Timezone Load Override ---
-            if (time_load_en) begin
+            // --- CHANGE 4: Use 'load_strobe' instead of 'time_load_en' ---
+            if (load_strobe) begin
                 curr_day    <= load_day;
                 curr_hour   <= load_hour;
                 curr_minute <= load_minute;
