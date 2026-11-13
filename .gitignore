@@ -1,22 +1,6 @@
-# Simulation artifacts
-*.vcd
+﻿__pycache__/
+*.pyc
+ml_env/
+nlt_data/
 *.vvp
-*.out
-*.log
-sim/*.vvp
-sim/*.vcd
-tb/**/*.vcd
-tb/**/*.vvp
-
-# Synthesis and EDA artifacts
-synthesis/reports/*.rpt
-synthesis/reports/*.log
-physical_design/reports/*
-yosys.log
-
-# IDE & OS files
-.DS_Store
-Thumbs.db
-*.swp
-*~
-.vscode/
+*.vcd
