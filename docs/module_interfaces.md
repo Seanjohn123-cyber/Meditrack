@@ -14,6 +14,7 @@
 | `rst_n` | 1 bit | Active-low | Asynchronous system reset |
 | `slot_id` | 4 bits (`[3:0]`) | `0` to `14` | 15 medication reminder slots |
 | `med_id` | 2 bits (`[1:0]`) | `0` to `3` | 4 distinct medications |
+| `day` | 3 bits (`[2:0]`) | `0` to `6` | Day of week (0=Day 0 ... 6=Day 6) |
 | `hour` | 5 bits (`[4:0]`) | `0` to `23` | Hours (24-hour time format) |
 | `minute` | 6 bits (`[5:0]`) | `0` to `59` | Minutes |
 | `due_vector` | 15 bits (`[14:0]`) | Bitmask | Bit `i` high indicates slot `i` is due (0 to 14) |
@@ -38,14 +39,16 @@
   - `cfg_write_req`: 1 bit write strobe
   - `cfg_slot_idx[3:0]`: target slot index (0–14)
   - `cfg_med_id[1:0]`: medication ID (0–3)
+  - `cfg_day[2:0]`: scheduled day of week (0–6)
   - `cfg_hour[4:0]`: scheduled hour (0–23)
   - `cfg_minute[5:0]`: scheduled minute (0–59)
   - `cfg_enable`: 1 bit schedule enable flag
 - **Outputs:**
-  - `cfg_error`: 1 bit flag (asserted 1 cycle if write fields are out of range)
+  - `cfg_error`: 1 bit flag (asserted 1 cycle if write fields are out of range: slot > 14, day > 6, hour > 23, minute > 59)
   - `mem_we`: 1 bit write enable strobe to `schedule_memory`
   - `mem_slot[3:0]`: validated slot index (0–14)
   - `mem_med_id[1:0]`: validated medication ID
+  - `mem_day[2:0]`: validated day of week (0–6)
   - `mem_hour[4:0]`: validated hour
   - `mem_minute[5:0]`: validated minute
   - `mem_enable`: validated enable
@@ -53,9 +56,10 @@
 #### 2.2 `schedule_memory.v`
 - **Inputs:**
   - `clk`, `rst_n`
-  - `mem_we`, `mem_slot[3:0]`, `mem_med_id[1:0]`, `mem_hour[4:0]`, `mem_minute[5:0]`, `mem_enable`
+  - `mem_we`, `mem_slot[3:0]`, `mem_med_id[1:0]`, `mem_day[2:0]`, `mem_hour[4:0]`, `mem_minute[5:0]`, `mem_enable`
 - **Outputs:**
   - `sched_enables[14:0]`: continuous 15-bit enable vector
+  - `sched_days[44:0]`: packed 15×3-bit scheduled days of week (0–6)
   - `sched_hours[74:0]`: packed 15×5-bit scheduled hours
   - `sched_minutes[89:0]`: packed 15×6-bit scheduled minutes
   - `sched_med_ids[29:0]`: packed 15×2-bit medication IDs
@@ -83,8 +87,10 @@
 - **Inputs:**
   - `clk`, `rst_n`
   - `time_load_en`: 1 bit strobe to load time
+  - `load_day[2:0]`: day of week to load (0–6)
   - `load_hour[4:0]`, `load_minute[5:0]`
 - **Outputs:**
+  - `curr_day[2:0]`: current day of week (0–6, rolls over 6 -> 0 at 23:59 -> 00:00)
   - `curr_hour[4:0]`: current hour (0–23)
   - `curr_minute[5:0]`: current minute (0–59)
   - `minute_tick`: 1-cycle pulse emitted on each minute boundary
@@ -93,10 +99,11 @@
 - **Inputs:**
   - `clk`, `rst_n`
   - `minute_tick`: 1-cycle pulse from `timer_unit`
+  - `curr_day[2:0]`: current day of week from `timer_unit`
   - `curr_hour[4:0]`, `curr_minute[5:0]`
-  - `sched_enables[14:0]`, `sched_hours[74:0]`, `sched_minutes[89:0]`
+  - `sched_enables[14:0]`, `sched_days[44:0]`, `sched_hours[74:0]`, `sched_minutes[89:0]`
 - **Outputs:**
-  - `due_vector[14:0]`: 1-cycle pulse vector where bit `i` is high if slot `i` matches current time (0 to 14)
+  - `due_vector[14:0]`: 1-cycle pulse vector where bit `i` is high if slot `i` matches current day, hour, and minute (0 to 14)
 
 ---
 
