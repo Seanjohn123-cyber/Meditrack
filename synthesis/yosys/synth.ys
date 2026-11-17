@@ -1,0 +1,26 @@
+# synth.ys -- full-SoC synthesis script (Day 6). Run from the repository root:
+#   yosys -s synthesis/yosys/synth.ys
+# Add/remove read_verilog lines to match files that exist in the repo.
+read_verilog -sv rtl/configuration/config_interface.v
+read_verilog -sv rtl/configuration/schedule_memory.v
+read_verilog -sv rtl/communication/caregiver_interface.v
+read_verilog -sv rtl/timing/timer_unit.v
+read_verilog -sv rtl/timing/schedule_matcher.v
+read_verilog -sv rtl/events/event_queue.v
+read_verilog -sv rtl/events/dose_tracker.v
+read_verilog -sv rtl/reminder/reminder_controller.v
+read_verilog -sv rtl/reminder/acknowledgement_unit.v
+read_verilog -sv rtl/reminder/missed_dose_detector.v
+read_verilog -sv rtl/peripherals/compartment_controller.v
+read_verilog -sv rtl/peripherals/display_controller.v
+read_verilog -sv rtl/peripherals/alert_controller.v
+read_verilog -sv rtl/top/medi_soc_top.v
+
+hierarchy -check -top medi_soc_top
+proc
+check -assert
+opt
+synth -top medi_soc_top
+check
+stat
+write_verilog -noattr synthesis/reports/medi_soc_netlist.v

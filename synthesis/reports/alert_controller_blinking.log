@@ -1,0 +1,619 @@
+
+ /----------------------------------------------------------------------------\
+ |  yosys -- Yosys Open SYnthesis Suite                                       |
+ |  Copyright (C) 2012 - 2026  Claire Xenia Wolf <claire@yosyshq.com>         |
+ |  Distributed under an ISC-like license, type "license" to see terms        |
+ \----------------------------------------------------------------------------/
+ Yosys 0.70+385 (git sha1 098e46a36, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)
+
+-- Running command `read_verilog rtl/peripherals/alert_controller.v; chparam -set BLINK_EN 1 alert_controller; hierarchy -check -top alert_controller; synth -top alert_controller; check; stat' --
+
+1. Executing Verilog-2005 frontend: rtl/peripherals/alert_controller.v
+Parsing Verilog input from `rtl/peripherals/alert_controller.v' to AST representation.
+Generating RTLIL representation for module `\alert_controller'.
+Successfully finished Verilog frontend.
+Parameter \BLINK_EN = 1
+
+2. Executing AST frontend in derive mode using pre-parsed AST for module `\alert_controller'.
+Parameter \BLINK_EN = 1
+Generating RTLIL representation for module `$paramod\alert_controller\BLINK_EN=s32'00000000000000000000000000000001'.
+
+3. Executing HIERARCHY pass (managing design hierarchy).
+
+3.1. Analyzing design hierarchy..
+Top module:  \alert_controller
+
+3.2. Analyzing design hierarchy..
+Top module:  \alert_controller
+Removed 0 unused modules.
+
+4. Executing SYNTH pass.
+
+4.1. Executing HIERARCHY pass (managing design hierarchy).
+
+4.1.1. Analyzing design hierarchy..
+Top module:  \alert_controller
+
+4.1.2. Analyzing design hierarchy..
+Top module:  \alert_controller
+Removed 0 unused modules.
+
+4.2. Executing PROC pass (convert processes to netlists).
+
+4.2.1. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Cleaned up 0 empty switches.
+
+4.2.2. Executing PROC_RMDEAD pass (remove dead branches from decision trees).
+Marked 3 switch rules as full_case in process $rtl/peripherals/alert_controller.v:31$proc$1 in module alert_controller.
+Removed a total of 0 dead cases.
+
+4.2.3. Executing PROC_PRUNE pass (remove redundant assignments in processes).
+Removed 1 redundant assignment.
+Promoted 0 assignments to connections.
+
+4.2.4. Executing PROC_INIT pass (extract init attributes).
+
+4.2.5. Executing PROC_ARST pass (detect async resets in processes).
+Found async reset \rst_n in `\alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+
+4.2.6. Executing PROC_ROM pass (convert switches to ROMs).
+Converted 0 switches.
+<suppressed ~2 debug messages>
+
+4.2.7. Executing PROC_MUX pass (convert decision trees to multiplexers).
+Creating decoders for process `\alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+     1/2: $0\g_blink.cnt[15:0]
+     2/2: $0\g_blink.phase[0:0]
+
+4.2.8. Executing PROC_DLATCH pass (convert process syncs to latches).
+
+4.2.9. Executing PROC_DFF pass (convert process syncs to FFs).
+Creating register for signal `\alert_controller.\g_blink.cnt' using process `\alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+  created $adff cell `$procdff$25' with positive edge clock and positive level reset.
+Creating register for signal `\alert_controller.\g_blink.phase' using process `\alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+  created $adff cell `$procdff$30' with positive edge clock and positive level reset.
+
+4.2.10. Executing PROC_MEMWR pass (convert process memory writes to cells).
+
+4.2.11. Executing PROC_CLEAN pass (remove empty switches from decision trees).
+Found and cleaned up 2 empty switches in `\alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+Removing empty process `alert_controller.$rtl/peripherals/alert_controller.v:31$proc$1'.
+Cleaned up 2 empty switches.
+
+4.2.12. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+<suppressed ~6 debug messages>
+
+4.3. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.4. Executing CHECK pass (checking for obvious problems).
+Checking module alert_controller...
+Found and reported 0 problems.
+
+4.5. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+Removed 4 unused cells and 14 unused wires.
+<suppressed ~5 debug messages>
+
+4.6. Executing OPT pass (performing simple optimizations).
+
+4.6.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.6.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 11 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+<suppressed ~3 debug messages>
+Removed a total of 1 cells.
+
+4.6.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \alert_controller..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~6 debug messages>
+
+4.6.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \alert_controller.
+Performed a total of 0 changes.
+
+4.6.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.6.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.6.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.6.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.6.9. Finished fast OPT passes. (There is nothing left to do.)
+
+4.7. Executing FSM pass (extract and optimize FSM).
+
+4.7.1. Executing FSM_DETECT pass (finding FSMs in design).
+
+4.7.2. Executing FSM_EXTRACT pass (extracting FSM from design).
+
+4.7.3. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+4.7.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.7.5. Executing FSM_OPT pass (simple optimizations of FSMs).
+
+4.7.6. Executing FSM_RECODE pass (re-assigning FSM state encoding).
+
+4.7.7. Executing FSM_INFO pass (dumping all available information on FSM cells).
+
+4.7.8. Executing FSM_MAP pass (mapping FSMs to basic logic).
+
+4.8. Executing OPT pass (performing simple optimizations).
+
+4.8.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.8.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.8.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \alert_controller..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~6 debug messages>
+
+4.8.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \alert_controller.
+Performed a total of 0 changes.
+
+4.8.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.8.6. Executing OPT_DFF pass (perform DFF optimizations).
+Adding EN signal on $procdff$30 ($adff) from module alert_controller (D = $0\g_blink.phase[0:0], Q = \g_blink.phase).
+
+4.8.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.8.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.8.9. Rerunning OPT passes. (Maybe there is more to do..)
+
+4.8.10. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \alert_controller..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~6 debug messages>
+
+4.8.11. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \alert_controller.
+Performed a total of 0 changes.
+
+4.8.12. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 11 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.8.13. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.8.14. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.8.15. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.8.16. Finished fast OPT passes. (There is nothing left to do.)
+
+4.9. Executing WREDUCE pass (reducing word size of cells).
+Removed top 1 bits (of 2) from port B of cell alert_controller.$auto$simple.cc:214:make_patterns_logic$33 ($ne).
+Removed top 13 bits (of 16) from port B of cell alert_controller.$rtl/peripherals/alert_controller.v:38$eq$4 ($eq).
+Removed top 15 bits (of 16) from port B of cell alert_controller.$rtl/peripherals/alert_controller.v:42$add$6 ($add).
+
+4.10. Executing PEEPOPT pass (run peephole optimizers).
+
+4.11. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.12. Executing ALUMACC pass (create $alu and $macc cells).
+Extracting $alu and $macc cells in module alert_controller:
+  creating $macc model for $rtl/peripherals/alert_controller.v:42$add$6 ($add).
+  creating $alu model for $macc $rtl/peripherals/alert_controller.v:42$add$6.
+  creating $alu cell for $rtl/peripherals/alert_controller.v:42$add$6: $auto$alumacc.cc:578:replace_alu$34
+  created 1 $alu and 0 $macc cells.
+
+4.13. Executing SHARE pass (SAT-based resource sharing).
+
+4.14. Executing OPT pass (performing simple optimizations).
+
+4.14.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.14.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 11 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.14.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \alert_controller..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~6 debug messages>
+
+4.14.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \alert_controller.
+Performed a total of 0 changes.
+
+4.14.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 11 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.14.6. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.14.7. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.14.8. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.14.9. Finished fast OPT passes. (There is nothing left to do.)
+
+4.15. Executing MEMORY pass.
+
+4.15.1. Executing OPT_MEM pass (optimize memories).
+Performed a total of 0 transformations.
+
+4.15.2. Executing OPT_MEM_PRIORITY pass (removing unnecessary memory write priority relations).
+Performed a total of 0 transformations.
+
+4.15.3. Executing OPT_MEM_FEEDBACK pass (finding memory read-to-write feedback paths).
+
+4.15.4. Executing MEMORY_BMUX2ROM pass (converting muxes to ROMs).
+
+4.15.5. Executing MEMORY_DFF pass (merging $dff cells to $memrd).
+
+4.15.6. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.15.7. Executing MEMORY_SHARE pass (consolidating $memrd/$memwr cells).
+
+4.15.8. Executing OPT_MEM_WIDEN pass (optimize memories where all ports are wide).
+Performed a total of 0 transformations.
+
+4.15.9. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.15.10. Executing MEMORY_COLLECT pass (generating $mem cells).
+
+4.16. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.17. Executing OPT pass (performing simple optimizations).
+
+4.17.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+<suppressed ~1 debug messages>
+
+4.17.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.17.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.17.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+Removed 0 unused cells and 1 unused wires.
+<suppressed ~1 debug messages>
+
+4.17.5. Finished fast OPT passes.
+
+4.18. Executing MEMORY_MAP pass (converting memories to logic and flip-flops).
+
+4.19. Executing OPT pass (performing simple optimizations).
+
+4.19.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.19.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.19.3. Executing OPT_MUXTREE pass (detect dead branches in mux trees).
+Running muxtree optimizer on module \alert_controller..
+  Creating internal representation of mux trees.
+  Evaluating internal representation of mux trees.
+  Analyzing evaluation results.
+Removed 0 multiplexer ports.
+<suppressed ~5 debug messages>
+
+4.19.4. Executing OPT_REDUCE pass (consolidate $*mux and $reduce_* inputs).
+  Optimizing cells in module \alert_controller.
+Performed a total of 0 changes.
+
+4.19.5. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 10 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.19.6. Executing OPT_SHARE pass.
+
+4.19.7. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.19.8. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+
+4.19.9. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.19.10. Finished fast OPT passes. (There is nothing left to do.)
+
+4.20. Executing TECHMAP pass (map to technology primitives).
+
+4.20.1. Executing Verilog-2005 frontend: C:\Users\user\Downloads\oss-cad-suite\bin\../share/yosys/techmap.v
+Parsing Verilog input from `C:\Users\user\Downloads\oss-cad-suite\bin\../share/yosys/techmap.v' to AST representation.
+Generating RTLIL representation for module `\_90_simplemap_bool_ops'.
+Generating RTLIL representation for module `\_90_simplemap_reduce_ops'.
+Generating RTLIL representation for module `\_90_simplemap_logic_ops'.
+Generating RTLIL representation for module `\_90_simplemap_compare_ops'.
+Generating RTLIL representation for module `\_90_simplemap_various'.
+Generating RTLIL representation for module `\_90_simplemap_registers'.
+Generating RTLIL representation for module `\_90_shift_ops_shr_shl_sshl_sshr'.
+Generating RTLIL representation for module `\_90_shift_shiftx'.
+Generating RTLIL representation for module `\_90_fa'.
+Generating RTLIL representation for module `\_90_lcu_brent_kung'.
+Generating RTLIL representation for module `\_90_alu'.
+Generating RTLIL representation for module `\_90_macc'.
+Generating RTLIL representation for module `\_90_alumacc'.
+Generating RTLIL representation for module `$__div_mod_u'.
+Generating RTLIL representation for module `$__div_mod_trunc'.
+Generating RTLIL representation for module `\_90_div'.
+Generating RTLIL representation for module `\_90_mod'.
+Generating RTLIL representation for module `$__div_mod_floor'.
+Generating RTLIL representation for module `\_90_divfloor'.
+Generating RTLIL representation for module `\_90_modfloor'.
+Generating RTLIL representation for module `\_90_pow'.
+Generating RTLIL representation for module `\_90_demux'.
+Generating RTLIL representation for module `\_90_lut'.
+Generating RTLIL representation for module `$connect'.
+Generating RTLIL representation for module `$input_port'.
+Successfully finished Verilog frontend.
+
+4.20.2. Continuing TECHMAP pass.
+Using extmapper simplemap for cells of type $adffe.
+Using extmapper simplemap for cells of type $ne.
+Using template $paramod$2af30114e9bd4ccb04dad757b3f0a8f6bf0615b0\_90_alu for cells of type $alu.
+Using extmapper simplemap for cells of type $eq.
+Using extmapper simplemap for cells of type $not.
+Using extmapper simplemap for cells of type $and.
+Using extmapper simplemap for cells of type $mux.
+Using extmapper simplemap for cells of type $adff.
+Using extmapper simplemap for cells of type $xor.
+Using template $paramod\_90_fa\WIDTH=32'00000000000000000000000000010000 for cells of type $fa.
+Using template $paramod\_90_lcu_brent_kung\WIDTH=32'00000000000000000000000000010000 for cells of type $lcu.
+Using extmapper simplemap for cells of type $pos.
+Using extmapper simplemap for cells of type $or.
+No more expansions possible.
+<suppressed ~292 debug messages>
+
+4.21. Executing OPT pass (performing simple optimizations).
+
+4.21.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+<suppressed ~171 debug messages>
+
+4.21.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 131 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Computing hashes of 127 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+<suppressed ~12 debug messages>
+Removed a total of 4 cells.
+
+4.21.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.21.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+Removed 17 unused cells and 86 unused wires.
+<suppressed ~18 debug messages>
+
+4.21.5. Finished fast OPT passes.
+
+4.22. Executing ABC pass (technology mapping using ABC).
+
+4.22.1. Summary of detected clock domains:
+  15 cells in clk=\clk, en=$auto$simple.cc:213:make_patterns_logic$32, arst=!\rst_n, srst={ }
+  95 cells in clk=\clk, en={ }, arst=!\rst_n, srst={ }
+
+4.22.2. Extracting gate netlist of module `\alert_controller' to `<abc-temp-dir>/input.blif'..
+Found matching posedge clock domain: \clk, enabled by $auto$simple.cc:213:make_patterns_logic$32, asynchronously reset by !\rst_n
+
+4.22.3. Extracting gate netlist of module `\alert_controller' to `<abc-temp-dir>/input.blif'..
+Found matching posedge clock domain: \clk, asynchronously reset by !\rst_n
+
+4.22.3.1. Executed ABC.
+Extracted 14 gates and 26 wires to a netlist network with 11 inputs and 4 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: ======== ABC command line "source <abc-temp-dir>/abc.script"
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+4.22.3.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:        3
+ABC RESULTS:            ANDNOT cells:        1
+ABC RESULTS:              NAND cells:        2
+ABC RESULTS:               NOR cells:        4
+ABC RESULTS:               NOT cells:        1
+ABC RESULTS:        internal signals:       11
+ABC RESULTS:           input signals:       11
+ABC RESULTS:          output signals:        4
+Removing temp directory.
+
+4.22.3.1. Executed ABC.
+Extracted 79 gates and 98 wires to a netlist network with 18 inputs and 25 outputs.
+Running ABC script: <abc-temp-dir>/abc.script
+ABC: ======== ABC command line "source <abc-temp-dir>/abc.script"
+ABC: + read_blif <abc-temp-dir>/input.blif 
+ABC: + read_library <abc-temp-dir>/stdcells.genlib 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &fraig -x 
+ABC: + &put 
+ABC: + scorr 
+ABC: Warning: The network is combinational (run "fraig" or "fraig_sweep").
+ABC: + dc2 
+ABC: + dretime 
+ABC: + strash 
+ABC: + &get -n 
+ABC: + &dch -f 
+ABC: + &nf 
+ABC: + &put 
+ABC: + write_blif <abc-temp-dir>/output.blif 
+
+4.22.3.2. Re-integrating ABC results.
+ABC RESULTS:               AND cells:       31
+ABC RESULTS:            ANDNOT cells:       13
+ABC RESULTS:              NAND cells:        1
+ABC RESULTS:               NOT cells:        2
+ABC RESULTS:                OR cells:       20
+ABC RESULTS:             ORNOT cells:        1
+ABC RESULTS:              XNOR cells:        1
+ABC RESULTS:        internal signals:       55
+ABC RESULTS:           input signals:       18
+ABC RESULTS:          output signals:       25
+Removing temp directory.
+Removing global temp directory.
+
+4.23. Executing OPT pass (performing simple optimizations).
+
+4.23.1. Executing OPT_EXPR pass (perform const folding).
+Optimizing module alert_controller.
+
+4.23.2. Executing OPT_MERGE pass (detect identical cells).
+Finding identical cells in module `\alert_controller'.
+Computing hashes of 97 cells of `\alert_controller'.
+Finding duplicate cells in `\alert_controller'.
+Removed a total of 0 cells.
+
+4.23.3. Executing OPT_DFF pass (perform DFF optimizations).
+
+4.23.4. Executing OPT_CLEAN pass (remove unused cells and wires).
+Finding unused cells or wires in module \alert_controller..
+Removed 0 unused cells and 69 unused wires.
+<suppressed ~1 debug messages>
+
+4.23.5. Finished fast OPT passes.
+
+4.24. Executing HIERARCHY pass (managing design hierarchy).
+Attribute `top' found on module `alert_controller'. Setting top module to alert_controller.
+
+4.24.1. Analyzing design hierarchy..
+Top module:  \alert_controller
+
+4.24.2. Analyzing design hierarchy..
+Top module:  \alert_controller
+Removed 0 unused modules.
+
+4.25. Printing statistics.
+
+=== alert_controller ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       71 wires
+      116 wire bits
+        7 public wires
+       22 public wire bits
+        5 ports
+        5 port bits
+       97 cells
+       14   $_ANDNOT_
+       34   $_AND_
+        1   $_DFFE_PN1P_
+       16   $_DFF_PN0_
+        3   $_NAND_
+        4   $_NOR_
+        3   $_NOT_
+        1   $_ORNOT_
+       20   $_OR_
+        1   $_XNOR_
+
+4.26. Executing CHECK pass (checking for obvious problems).
+Checking module alert_controller...
+Found and reported 0 problems.
+
+5. Executing CHECK pass (checking for obvious problems).
+Checking module alert_controller...
+Found and reported 0 problems.
+
+6. Printing statistics.
+
+=== alert_controller ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       71 wires
+      116 wire bits
+        7 public wires
+       22 public wire bits
+        5 ports
+        5 port bits
+       97 cells
+       14   $_ANDNOT_
+       34   $_AND_
+        1   $_DFFE_PN1P_
+       16   $_DFF_PN0_
+        3   $_NAND_
+        4   $_NOR_
+        3   $_NOT_
+        1   $_ORNOT_
+       20   $_OR_
+        1   $_XNOR_
+
+End of script. Logfile hash: d0c16edc0a
+Yosys 0.70+385 (git sha1 098e46a36, Release, GNU /usr/bin/x86_64-w64-mingw32-g++ 15.2.1)
+Time spent: 2% 16x opt_expr (0 sec), 2% 15x opt_clean (0 sec), ...
