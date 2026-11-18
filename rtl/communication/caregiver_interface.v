@@ -4,6 +4,8 @@
 // Owner       : Person 1 (Configuration & Caregiver Communication)
 // Description : Isolated caregiver telemetry FIFO and valid/ready transmitter.
 //               - Captures canonical start, ack, and missed event pulses.
+//               - Event codes match docs/register_map.md: 
+//                 00=Start, 01=Ack, 10=Missed, 11=Reserved.
 //               - Holds comm_valid and payload stable until (comm_valid && comm_ready).
 //               - Buffers up to FIFO_DEPTH records so slow external receivers
 //                 never stall local timers, queues, or reminders.
@@ -50,12 +52,12 @@ module caregiver_interface #(
 );
 
     // -------------------------------------------------------------------------
-    // Event Type Encodings
+    // Canonical Event Type Encodings (Harmonized with docs/register_map.md)
     // -------------------------------------------------------------------------
-    localparam [1:0] EVT_NONE   = 2'b00;
-    localparam [1:0] EVT_START  = 2'b01;
-    localparam [1:0] EVT_ACK    = 2'b10;
-    localparam [1:0] EVT_MISSED = 2'b11;
+    localparam [1:0] EVT_START    = 2'b00;
+    localparam [1:0] EVT_ACK      = 2'b01;
+    localparam [1:0] EVT_MISSED   = 2'b10;
+    localparam [1:0] EVT_RESERVED = 2'b11;
 
     // -------------------------------------------------------------------------
     // Incoming Event Capture & Priority Encoding (ACK > MISSED > START)
@@ -78,7 +80,7 @@ module caregiver_interface #(
             evt_in_type = EVT_START;
             evt_in_slot = reminder_start_slot;
         end else begin
-            evt_in_type = EVT_NONE;
+            evt_in_type = EVT_RESERVED;
             evt_in_slot = {SLOT_WIDTH{1'b0}};
         end
     end

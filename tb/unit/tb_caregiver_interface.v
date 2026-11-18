@@ -21,9 +21,9 @@ module tb_caregiver_interface;
     localparam integer PAYLOAD_W  = 17;
     localparam integer CLK_PERIOD = 10;
 
-    localparam [1:0] EVT_START  = 2'b01;
-    localparam [1:0] EVT_ACK    = 2'b10;
-    localparam [1:0] EVT_MISSED = 2'b11;
+    localparam [1:0] EVT_START  = 2'b00;
+    localparam [1:0] EVT_ACK    = 2'b01;
+    localparam [1:0] EVT_MISSED = 2'b10;
 
     // DUT Signals
     reg                  clk;
